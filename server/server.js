@@ -47,7 +47,7 @@ router.route('/:id').get( (req, res) => {
 });
 
 //create
-router.route("/add").post(function (req, res) {
+router.route("/add").post( (req, res) => {
     let todo = new Todo(req.body)
     todo.save()
       .then( () => res.status(200).send(`${todo.text} is successfully added`) ) 
@@ -55,7 +55,7 @@ router.route("/add").post(function (req, res) {
 });
 
 //update
-router.route("/:id").put(function (req, res) {
+router.route("/:id").put( (req, res) => {
     Todo.findByIdAndUpdate(req.params.id, req.body)
     .then((todo) => {
       todo.done = !todo.done;
@@ -66,7 +66,7 @@ router.route("/:id").put(function (req, res) {
 });
 
 //delete
-router.route("/:id").delete(function (req, res) {
+router.route("/:id").delete( (req, res) => {
   Todo.findByIdAndRemove( req.params.id, (err, item) => {
     if (err) { res.status(400).send(err) }
     res.status(200).send(`id ${req.params.id} is successfully deleted`)
