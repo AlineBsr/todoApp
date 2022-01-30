@@ -26,7 +26,6 @@ let todoSchema = new Schema({
 let Todo = mongoose.model("Todo", todoSchema);
 
 //Routes
-
 app.use(cors());
 app.use(bodyParser.json());
 app.use("/todos", router);

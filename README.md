@@ -9,5 +9,4 @@ A simple todo-list management application
 MERN training : in progress...  
 
 ## rest todo : 
-- refactor components
 - user space 
