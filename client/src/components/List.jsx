@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Loader from "./Loader";
 
 export default function List(props) {
-  const { type, todo, addItem, isLoading, handleItemClick,
+  const { typeList, todo, addItem, isLoading, handleItemClick,
          handleTrashClick, handleFormSubmit, handleInputChange } = props;
 
   const itemsDone = todo.filter( (item) => {
@@ -17,7 +17,7 @@ export default function List(props) {
     }
   });
 
-  if (type === "itemsDone") {
+  if (typeList === "itemsDone") {
     return (
       <div className="col-md-6">
         <div className="todolist">
@@ -44,7 +44,7 @@ export default function List(props) {
     );
   }
 
-  if (type === "itemsTodo") {
+  if (typeList === "itemsTodo") {
     return (
       <>
         <div className="col-md-6">
@@ -54,7 +54,7 @@ export default function List(props) {
               <input
                 className="form-control form-contrµol-lg "
                 placeholder="add todo"
-                value={addItem && `${addItem.text}`}
+                value={addItem && addItem.text  }
                 onChange={(e) => handleInputChange(e)}
               />
             </form>

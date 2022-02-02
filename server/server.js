@@ -3,71 +3,29 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const app = express();
-const Schema = mongoose.Schema;
-const router = express.Router();
-require('dotenv').config({ path: `../.env` })
+require("dotenv").config({ path: "../.env" })
 
-// Connect Server
-app.listen(4000, () => {
-  console.log("server is up and running on port 4000");
+//Def routes
+const { routeTodo } = require("./routes/todo.route");
+const { routeAuth } = require("./routes/auth.route");
+
+const port = 4000;
+
+//Connect Server
+app.listen(port, () => {
+  console.log("server is up and running on port " + port);
 });
 
-const db = `mongodb+srv://${process.env.REACT_APP_user}:${process.env.REACT_APP_psw}@cluster0.3jya8.mongodb.net/todoDB?retryWrites=true&w=majority`;
+const db = process.env.REACT_APP_ATLAS_URI;
 
 mongoose.connect(db)
   .then(() => console.log("successfully connected to db"))
   .catch((err) => console.log(err));
 
-//Todo Schema
-let todoSchema = new Schema({
-  text: String,
-  done: Boolean,
-});
-let Todo = mongoose.model("Todo", todoSchema);
-
 //Routes
 app.use(cors());
 app.use(bodyParser.json());
-app.use("/todos", router);
+app.use("/todos", routeTodo);
+app.use("/users", routeAuth);
 
-//read
-router.route("/").get( (_, res) => {
-  Todo.find( (err, data) => {
-    if (err) {  res.send(400).send(`ERROR ${err}`) }
-    res.status(200).send(data);
-  });
-});
-
-router.route('/:id').get( (req, res) => {
-    Todo.findById( req.params.id, (err, item) => {
-      if (err) { res.status(400).send(err) }
-      res.status(200).send(item)
-    });
-});
-
-//create
-router.route("/add").post( (req, res) => {
-    let todo = new Todo(req.body)
-    todo.save()
-      .then( () => res.status(200).send(`${todo.text} is successfully added`) ) 
-      .catch( err => res.status(400).send(`error adding document ${err}`) )
-});
-
-//update
-router.route("/:id").put( (req, res) => {
-    Todo.findByIdAndUpdate(req.params.id, req.body)
-    .then((todo) => {
-      todo.done = !todo.done;
-      todo.save();
-      res.status(200).send(`${todo.text} is successfully updated`)
-    })
-    .catch((err) => res.status(400).send(`error adding document ${err}`) )
-});
-
-//delete
-router.route("/:id").delete( (req, res) => {
-  Todo.findByIdAndRemove( req.params.id, (err, item) => {
-    if (err) { res.status(400).send(err) }
-    res.status(200).send(`id ${req.params.id} is successfully deleted`)
-  });
-});
+// https://blog.bitsrc.io/react-production-deployment-part-1-netlify-703686631dd1
